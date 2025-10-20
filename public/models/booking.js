@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userDetails = new mongoose.Schema({
+const bookingDetails = new mongoose.Schema({
     customerId: {
         type: String,
         required: false,
@@ -12,6 +12,11 @@ const userDetails = new mongoose.Schema({
         default: ""
     },
     country: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    mobile: {
         type: String,
         required: false,
         default: ""
@@ -31,31 +36,113 @@ const userDetails = new mongoose.Schema({
         required: false,
         default: ""
     },
+    tripType: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    carType: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    pickupLocation: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    dropLocation: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    totalPassenger: {
+        type: Number,
+        required: false,
+        default: ""
+    },
+    totalLuggage: {
+        type: Number,
+        required: false,
+        default: ""
+    },
+    vendorName: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    vendorPrice: {
+        type: Number,
+        required: false,
+        default: ""
+    },
+    bookingPrice: {
+        type: Number,
+        required: false,
+        default: ""
+    },
+    advancePaid: {
+        type: Number,
+        required: false,
+        default: ""
+    },
+    commission: {
+        type: Number,
+        required: false,
+        default: ""
+    },
+    vehicleId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: "vehicle",
+        default: ""
+    },
+    vehicleNumber: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    vehicleName: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    vehicleType: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    driverId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: "user",
+        default: ""
+    },
+    driverNumber: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    driverName: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    remarks: {
+        type: String,
+        required: false,
+        default: ""
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         required: false,
         ref: "user",
         default: null
     },
-    theme: {
-        type: String,
-        required: false,
-        default: ""
-    },
     meta: {
         type: String,
         required: false,
         default: ""
-    },
-    role: {
-        type: String,
-        required: true,  // [User,superAdmin,Admin,subAdmin]
-        default: "user"
-    },
-    isGoogleLogin: {
-        type: Number,
-        required: false,
-        default: 0
     },
     isBlock: {
         type: Number,
@@ -72,5 +159,5 @@ const userDetails = new mongoose.Schema({
         timestamps: true
     }
 )
-const User = new mongoose.model("User", userDetails)
-export default User;
+const Booking = new mongoose.model("Booking", bookingDetails)
+export default Booking;

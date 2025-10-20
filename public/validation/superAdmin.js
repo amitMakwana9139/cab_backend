@@ -1,18 +1,8 @@
 // validations/taskValidation.js
 import Joi from 'joi';
-import mongoose from 'mongoose';
-
-// Custom validation for ObjectId
-const objectId = Joi.string().custom((value, helpers) => {
-    if (!mongoose.Types.ObjectId.isValid(value)) {
-        return helpers.message('Invalid ObjectId');
-    }
-    return value;
-});
 
 /* Create super admin validation */
 export const createSuperAdminValidation = Joi.object({
-    // tenant_id: objectId.required(),
     email: Joi.string().email().required(),
     mobile: Joi.string()
         .pattern(/^[0-9]{10}$/) // only digits, exactly 10 characters
@@ -51,4 +41,22 @@ export const createAdminValidation = Joi.object({
             'any.required': 'Mobile number is required',
         }),
     password: Joi.string().required().min(2),
+    permissions: Joi.object({
+        booking: Joi.object({
+            create: Joi.boolean().default(false),
+            edit: Joi.boolean().default(false),
+            delete: Joi.boolean().default(false),
+        }).default({}),
+
+        user: Joi.object({
+            view: Joi.boolean().default(false),
+            delete: Joi.boolean().default(false),
+        }).default({}),
+    })
+        .default({}) // ensure it's an object even if missing
+        .messages({
+            'object.base': 'Permissions must be a valid object',
+        }).required(),
+    theme: Joi.string().required(),
+    role: Joi.number().integer().required().valid(2, 3)
 });

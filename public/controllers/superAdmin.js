@@ -57,15 +57,15 @@ export const createAdmin = async (req, res) => {
         if (isUserExist) {
             return res.status(409).json({ status: 409, success: false, message: "User already exist!", data: {} });
         }
-        body.role = "admin";
+        body.role = +body.role === 2 ? "subAdmin" : "admin";
         body.createdBy = req.user._id;
         body.theme = req.user.theme;
         body.password = await encryptData(randomePassword);
         const response = await createSuperAdmin(body);
         if (response) {
-            return res.status(200).json({ status: 200, success: true, message: "Admin create succesfully!", data: {} });
+            return res.status(200).json({ status: 200, success: true, message: `${+body.role === 2 ? "subAdmin" : "admin"} create succesfully!`, data: {} });
         } else {
-            return res.status(500).json({ status: 500, success: false, message: "Admin not create!", data: {} });
+            return res.status(500).json({ status: 500, success: false, message: `${+body.role === 2 ? "subAdmin" : "admin"} not create!`, data: {} });
         }
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });

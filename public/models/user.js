@@ -1,5 +1,18 @@
 import mongoose from "mongoose";
 
+const permissionSchema = new mongoose.Schema({
+    booking: {
+        create: { type: Boolean, default: false },
+        edit: { type: Boolean, default: false },
+        delete: { type: Boolean, default: false },
+    },
+    user: {
+        view: { type: Boolean, default: false },
+        delete: { type: Boolean, default: false },
+    },
+    // you can extend with more modules later (reports, settings, etc.)
+}, { _id: false });
+
 const userDetails = new mongoose.Schema({
     name: {
         type: String,
@@ -44,9 +57,11 @@ const userDetails = new mongoose.Schema({
     },
     role: {
         type: String,
-        required: true,  // [User,superAdmin,Admin,subAdmin]
+        enum: ["user", "superAdmin", "subAdmin", "admin"],   // 0 - user, 1 - superAdmin, 2 - subAdmin, 3 - admin
+        required: true,
         default: "user"
     },
+    permissions: permissionSchema,
     isGoogleLogin: {
         type: Number,
         required: false,
