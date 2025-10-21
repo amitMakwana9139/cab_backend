@@ -6,7 +6,7 @@ import { verifytoken } from "../utills/jwt.helper.js";
 
 const router = new Router();
 
-/* Creaet super admin API */
+/* Create super admin API */
 router.post("/createSuperAdmin", validateRequest(createSuperAdminValidation), registerSuperAdmin);
 router.post("/loginSuperAdmin", validateRequest(signinSuperAdminValidation), userLogin);
 router.post("/createAdmin", verifytoken, validateRequest(createAdminValidation), createAdmin);

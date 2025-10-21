@@ -1,4 +1,4 @@
-import { bookCab, bookingList, singleBooking } from "../services/booking.js";
+import { bookCab, bookingList, deleteBooking, singleBooking } from "../services/booking.js";
 
 /* Create booking by subAdmin */
 export const cabBooking = async (req, res) => {
@@ -61,6 +61,21 @@ export const getSingleBooking = async (req, res) => {
             return res.status(200).json({ status: 200, success: true, message: "single booking details get succesfully.", data: response });
         } else {
             return res.status(200).json({ status: 200, success: true, message: "single booking details not found!", data: {} });
+        }
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
+}
+
+/* Delete single booking details list */
+export const removeSingleBooking = async (req, res) => {
+    const { id } = req.query;
+    try {
+        const response = await deleteBooking(id, req.user.id);
+        if (response && Object.keys(response).length > 0) {
+            return res.status(200).json({ status: 200, success: true, message: "single booking details delete succesfully.", data: {} });
+        } else {
+            return res.status(500).json({ status: 500, success: false, message: "single booking details not delete!", data: {} });
         }
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
