@@ -1,4 +1,4 @@
-import { addVehicleData, checkVehicle, deleteVehicleById, vehicleList } from "../services/vehicle.js";
+import { addVehicleData, checkVehicle, deleteVehicleById, editVehicleData, getVehicleById, vehicleList } from "../services/vehicle.js";
 
 /* Add vehicle by sub admin */
 export const addVehicle = async (req, res) => {
@@ -60,8 +60,18 @@ export const getVehicle = async (req, res) => {
 
 /* Edit vehicle by id */
 export const editVehicle = async (req, res) => {
+    const body = req.body;
     try {
-
+        const isVehicleExist = await getVehicleById(body.id);
+        if (!isVehicleExist) {
+            return res.status(404).json({ status: 404, success: false, message: "Vehicle details not found!", data: {} });
+        }
+        const response = await editVehicleData(body);
+        if (response && Object.keys(response).length > 0) {
+            return res.status(200).json({ status: 200, success: true, message: "Vehicle details edit succesfully.", data: {} });
+        } else {
+            return res.status(500).json({ status: 500, success: false, message: "Vehicle details not edit!", data: {} });
+        }
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
     }

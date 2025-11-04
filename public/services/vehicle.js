@@ -20,6 +20,26 @@ export const addVehicleData = async (body) => {
     }
 }
 
+/* Check vehicle exist by id */
+export const getVehicleById = async (id) => {
+    try {
+        const response = await Vehicle.findById(id).select({ _id: 1, vehicleNumber: 1 }).lean();
+        return response;
+    } catch (error) {
+        throw new Error("Failed to get vehicle details!");
+    }
+}
+
+/* Edit vehicle details by id */
+export const editVehicleData = async (body) => {
+    try {
+        const response = await Vehicle.findByIdAndUpdate(body.id, body, { new: true });
+        return response;
+    } catch (error) {
+        throw new Error("Failed to edit vehicle details!");
+    }
+}
+
 /* Get vehicle details */
 export const vehicleList = async (pageLimit, skip, search, userId) => {
     try {

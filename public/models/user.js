@@ -39,6 +39,11 @@ const userDetails = new mongoose.Schema({
         required: false,
         default: []
     },
+    profileImage: {
+        type: String,
+        required: false,
+        default: ""
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         required: false,
@@ -57,9 +62,9 @@ const userDetails = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["user", "superAdmin", "subAdmin", "admin"],   // 0 - user, 1 - superAdmin, 2 - subAdmin, 3 - admin
+        enum: ["customer", "superAdmin", "subAdmin", "admin"],   // 0 - customer, 1 - superAdmin, 2 - subAdmin, 3 - admin
         required: true,
-        default: "user"
+        default: "customer"
     },
     permissions: permissionSchema,
     isGoogleLogin: {

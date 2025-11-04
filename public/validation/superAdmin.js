@@ -58,5 +58,5 @@ export const createAdminValidation = Joi.object({
             'object.base': 'Permissions must be a valid object',
         }).required(),
     theme: Joi.string().required(),
-    role: Joi.number().integer().required().valid(0, 2, 3)
+    role: Joi.number().integer().required().valid(2, 3)
 });

@@ -11,8 +11,8 @@ const objectId = Joi.string().custom((value, helpers) => {
 
 /* Add vehicle validation */
 export const addVehicleValidation = Joi.object({
-    // vehicleImage:,
-    vehicleId: objectId.required(),
+    // vehicleId: objectId.required(),
+    vehicleImage: Joi.array().optional(),
     vehicleName: Joi.string().required(),
     vehicleNumber: Joi.string().required(),
     vehicleType: Joi.string().required()
@@ -21,9 +21,10 @@ export const addVehicleValidation = Joi.object({
 /* Create booking validation */
 export const editVehicleValidation = Joi.object({
     // vehicleImage:,
+    // vehicleId: objectId.required(),
     id: objectId.required(),
-    vehicleId: objectId.required(),
-    vehicleName: Joi.string().required(),
-    vehicleNumber: Joi.string().required(),
-    vehicleType: Joi.string().required()
+    vehicleImage: Joi.array().optional(),
+    vehicleName: Joi.string().optional(),
+    vehicleNumber: Joi.string().optional(),
+    vehicleType: Joi.string().optional()
 });

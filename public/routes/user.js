@@ -1,12 +1,16 @@
 import { Router } from "express";
-import { validateRequest } from "../middelware/validation.js";
-import { createSuperAdminValidation } from "../validation/superAdmin.js";
-import { registerSuperAdmin } from "../controllers/superAdmin.js";
+import { validateRequest, validateRequestForQuery } from "../middelware/validation.js";
 import { verifytoken } from "../utills/jwt.helper.js";
+import { createUserValidation, editUserValidation } from "../validation/user.js";
+import { createCustomer, deleteCustomer, editCustomer, getCustomerList } from "../controllers/user.js";
+import { commonIdValidation, paginationValidation } from "../validation/common.js";
 
 const router = new Router();
 
 /* Create user API */
-router.post("/addUser", verifytoken, validateRequest(createSuperAdminValidation), registerSuperAdmin);
+router.post("/createCustomer", verifytoken, validateRequest(createUserValidation), createCustomer);
+router.get("/getCustomerList", verifytoken, validateRequestForQuery(paginationValidation), getCustomerList);
+router.put("/editCustomer", verifytoken, validateRequest(editUserValidation), editCustomer);
+router.delete("/deleteCustomer", verifytoken, validateRequestForQuery(commonIdValidation), deleteCustomer);
 
 export default router;  
