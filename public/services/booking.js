@@ -17,7 +17,7 @@ export const bookingList = async (pageLimit, skip, search, userId) => {
             .sort({ createdAt: -1 })
             .select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0, createdBy: 0 })
             .lean();
-        const totalCount = await Booking.countDocuments({ createdBy: userId });
+        const totalCount = await Booking.countDocuments({ createdBy: userId, isDeleted: 0 });
         return { getCabBookingList, totalCount };
     } catch (error) {
         throw new Error("Failed to get booking details!");

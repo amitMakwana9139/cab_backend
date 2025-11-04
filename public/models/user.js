@@ -62,7 +62,7 @@ const userDetails = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["customer", "superAdmin", "subAdmin", "admin"],   // 0 - customer, 1 - superAdmin, 2 - subAdmin, 3 - admin
+        enum: ["customer", "superAdmin", "subAdmin", "admin", "driver"],   // 0 - customer, 1 - superAdmin, 2 - subAdmin, 3 - admin, 4 - driver
         required: true,
         default: "customer"
     },
