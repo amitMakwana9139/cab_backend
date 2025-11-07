@@ -9,15 +9,22 @@ export const bookCab = async (obj) => {
     }
 };
 
-export const bookingList = async (pageLimit, skip, search, userId) => {
+export const bookingList = async (pageLimit, skip, search, startDate, endDate, userId) => {
     try {
-        const getCabBookingList = await Booking.find({ createdBy: userId, isDeleted: 0 })
+
+        const query = { createdBy: userId, isDeleted: 0 };
+        if (startDate && endDate) {
+            const start = new Date(`${startDate}T00:00:00Z`);
+            const end = new Date(`${endDate}T23:59:59Z`);
+            query.createdAt = { $gte: start, $lte: end };
+        }
+        const getCabBookingList = await Booking.find(query)
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })
             .select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0, createdBy: 0 })
             .lean();
-        const totalCount = await Booking.countDocuments({ createdBy: userId, isDeleted: 0 });
+        const totalCount = await Booking.countDocuments(query);
         return { getCabBookingList, totalCount };
     } catch (error) {
         throw new Error("Failed to get booking details!");

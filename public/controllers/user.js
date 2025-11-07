@@ -1,5 +1,5 @@
 import { getUser } from "../services/superAdmin.js";
-import { addCustomer, customerList, deleteCustomerById, editCustomerById } from "../services/user.js";
+import { addCustomer, customerList, deleteCustomerById, editCustomerById, userList } from "../services/user.js";
 
 /* Create user API by super admin and admin */
 export const createCustomer = async (req, res) => {
@@ -95,6 +95,43 @@ export const deleteCustomer = async (req, res) => {
             return res.status(200).json({ status: 200, success: true, message: "Customer deleted successfully!", data: {} });
         } else {
             return res.status(500).json({ status: 500, success: false, message: "Customer not deleted!", data: {} });
+        }
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
+}
+
+/* Get all user list API with validation */
+/* Get customer list API with validation */
+export const getUserList = async (req, res) => {
+    const { page, limit, search } = req.query;
+    try {
+        const pageNumber = Number(page ?? 1);
+        const pageLimit = Number(limit ?? 1);
+        const skip = (pageNumber - 1) * pageLimit;
+        const response = await userList(pageLimit, skip, search);
+        if (response && response.getUserList?.length > 0) {
+            res.status(200).json({
+                status: 200,
+                success: true,
+                message: "User list get succesfully.",
+                data: {
+                    data: response.getUserList,
+                    count: response.totalCount,
+                    page: Math.ceil((response.totalCount / pageLimit))
+                }
+            });
+        } else {
+            res.status(200).json({
+                status: 200,
+                success: false,
+                message: "User list not get!",
+                data: {
+                    data: [],
+                    count: 0,
+                    page: 0
+                }
+            });
         }
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });

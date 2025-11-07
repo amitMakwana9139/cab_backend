@@ -18,12 +18,12 @@ export const cabBooking = async (req, res) => {
 
 /* Get cab booking details by subAdmin id  */
 export const getBookings = async (req, res) => {
-    const { page, limit, search } = req.query;
+    const { page, limit, search, startDate, endDate } = req.query;
     try {
         const pageNumber = Number(page ?? 1);
         const pageLimit = Number(limit ?? 1);
         const skip = (pageNumber - 1) * pageLimit;
-        const response = await bookingList(pageLimit, skip, search, req.user.id);
+        const response = await bookingList(pageLimit, skip, search, startDate, endDate, req.user.id);
         if (response && response.getCabBookingList?.length > 0) {
             res.status(200).json({
                 status: 200,

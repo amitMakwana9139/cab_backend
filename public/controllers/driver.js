@@ -1,7 +1,7 @@
-import { deleteDriver, driverList } from "../services/driver.js";
+import { deleteDriver, driverList, driverVehicleBookingList } from "../services/driver.js";
 import { getUser } from "../services/superAdmin.js";
 
-/* Delete single booking details list */
+/* Delete single driver details */
 export const removeDriver = async (req, res) => {
     const { id } = req.query;
     try {
@@ -20,7 +20,7 @@ export const removeDriver = async (req, res) => {
     }
 };
 
-/* Get cab booking details by subAdmin id  */
+/* Get driver details   */
 export const getDrivers = async (req, res) => {
     const { page, limit, search } = req.query;
     try {
@@ -44,6 +44,42 @@ export const getDrivers = async (req, res) => {
                 status: 200,
                 success: false,
                 message: "Driver list not get!",
+                data: {
+                    data: [],
+                    count: 0,
+                    page: 0
+                }
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
+};
+
+/* Get assign booking details for login driver */
+export const getAssignBooking = async (req, res) => {
+    const { page, limit, search } = req.query;
+    try {
+        const pageNumber = Number(page ?? 1);
+        const pageLimit = Number(limit ?? 1);
+        const skip = (pageNumber - 1) * pageLimit;
+        const response = await driverVehicleBookingList(pageLimit, skip, req.user.id);
+        if (response && response.getAssignBookingList?.length > 0) {
+            res.status(200).json({
+                status: 200,
+                success: true,
+                message: "Assign booking list of driver get succesfully.",
+                data: {
+                    data: response.getAssignBookingList,
+                    count: response.totalCount,
+                    page: Math.ceil((response.totalCount / pageLimit))
+                }
+            });
+        } else {
+            res.status(200).json({
+                status: 200,
+                success: false,
+                message: "Assign booking list not get!",
                 data: {
                     data: [],
                     count: 0,

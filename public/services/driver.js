@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import Booking from "../models/booking.js";
 
 /* Driver details delete succesfully */
 export const deleteDriver = async (id) => {
@@ -10,6 +11,7 @@ export const deleteDriver = async (id) => {
     }
 };
 
+/* Get driver list for super Admin */
 export const driverList = async (pageLimit, skip, search) => {
     try {
         const getDriverList = await User.find({ role: "driver", isDeleted: 0 })
@@ -20,6 +22,39 @@ export const driverList = async (pageLimit, skip, search) => {
             .lean();
         const totalCount = await User.countDocuments({ role: "driver", isDeleted: 0 });
         return { getDriverList, totalCount };
+    } catch (error) {
+        throw new Error("Failed to get booking details!");
+    }
+};
+
+/* Get assign booking details for driver */
+export const driverVehicleBookingList = async (pageLimit, skip, userId) => {
+    try {
+
+        const query = { createdBy: userId, isDeleted: 0 };
+        // if (startDate && endDate) {
+        //     const start = new Date(`${startDate}T00:00:00Z`);
+        //     const end = new Date(`${endDate}T23:59:59Z`);
+        //     query.createdAt = { $gte: start, $lte: end };
+        // }
+        const getAssignBookingList = await Booking.find(query)
+            .limit(pageLimit)
+            .skip(skip)
+            .sort({ createdAt: -1 })
+            .select({
+                isBlock: 0,
+                isDeleted: 0,
+                meta: 0,
+                driverId: 0,
+                driverNumber: 0,
+                driverName: 0,
+                createdBy: 0,
+                vehicleId: 0,
+                __v: 0
+            })
+            .lean();
+        const totalCount = await Booking.countDocuments(query);
+        return { getAssignBookingList, totalCount };
     } catch (error) {
         throw new Error("Failed to get booking details!");
     }

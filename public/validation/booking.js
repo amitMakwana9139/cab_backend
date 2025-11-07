@@ -46,3 +46,18 @@ export const createBookingValidation = Joi.object({
     driverName: Joi.string().required(),
     remarks: Joi.string().optional().allow(""),
 });
+
+// Note :- companyId optional in required 
+export const getBookingsValidation = Joi.object({
+    page: Joi.number().required().min(1),
+    limit: Joi.number().required().min(1),
+    search: Joi.string().allow(""),
+    startDate: Joi.string()
+        .pattern(/^\d{4}-\d{2}-\d{2}$/) // yyyy-mm-dd format
+        .allow(null, "") // allow empty or null
+        .optional(),
+    endDate: Joi.string()
+        .pattern(/^\d{4}-\d{2}-\d{2}$/)
+        .allow(null, "")
+        .optional(),
+});

@@ -4,6 +4,7 @@ import bookingRounter from "./booking.js"
 import vehicleRounter from "./vehicle.js"
 import userRouter from "./user.js"
 import driverRouter from "./driver.js"
+import settingRouter from "./setting.js"
 
 const router = new Router();
 
@@ -13,5 +14,6 @@ router.use("/booking", bookingRounter);
 router.use("/vehicle", vehicleRounter);
 router.use("/user", userRouter);
 router.use("/driver", driverRouter);
+router.use("/setting", settingRouter);
 
 export default router;
