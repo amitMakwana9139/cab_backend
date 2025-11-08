@@ -32,6 +32,7 @@ export const signinSuperAdminValidation = Joi.object({
 
 /* Create admin API with validation */
 export const createAdminValidation = Joi.object({
+    name: Joi.string().optional().min(2),
     mobile: Joi.string()
         .pattern(/^[0-9]{10}$/) // only digits, exactly 10 characters
         .required()

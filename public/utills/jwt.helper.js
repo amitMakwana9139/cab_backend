@@ -24,7 +24,7 @@ export const verifytoken = async (req, res, next) => {
         process.env.SECRET_KEY,
         async (err, user) => {
             if (err) {
-                return res.status(200).json({ status: 401, success: false, message: "User is unAuthorized!" });
+                return res.status(401).json({ status: 401, success: false, message: "User is unAuthorized!" });
             } else {
                 const getUser = await User.findById({ _id: user._id })
                 if (getUser) {
