@@ -1,4 +1,11 @@
-import { addVehicleData, checkVehicle, deleteVehicleById, editVehicleData, getVehicleById, vehicleList } from "../services/vehicle.js";
+import {
+    addVehicleData,
+    checkVehicle,
+    deleteVehicleById,
+    editVehicleData,
+    getVehicleById,
+    vehicleList
+} from "../services/vehicle.js";
 
 /* Add vehicle by sub admin */
 export const addVehicle = async (req, res) => {

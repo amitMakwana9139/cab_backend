@@ -31,6 +31,22 @@ const vehicleDetails = new mongoose.Schema({
         required: false,
         default: ""
     },
+    // Newly added features
+    insuranceExpiryDate: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    serviceStartKms: {
+        type: Number,
+        required: false,
+        default: 0
+    },
+    fitnessExpiryDate: {
+        type: String,
+        required: false,
+        default: ""
+    },
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         required: false,

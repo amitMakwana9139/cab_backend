@@ -9,6 +9,15 @@ export const bookCab = async (obj) => {
     }
 };
 
+export const editCabBooking = async (obj) => {
+    try {
+        const response = await Booking.findByIdAndUpdate({ _id: obj.id, isDeleted: 0 }, obj);
+        return response;
+    } catch (error) {
+        throw new Error("Failed to edit booking details!");
+    }
+}
+
 export const bookingList = async (pageLimit, skip, search, startDate, endDate, userId) => {
     try {
 
