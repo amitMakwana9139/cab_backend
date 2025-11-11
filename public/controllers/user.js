@@ -101,7 +101,6 @@ export const deleteCustomer = async (req, res) => {
     }
 }
 
-/* Get all user list API with validation */
 /* Get customer list API with validation */
 export const getUserList = async (req, res) => {
     const { page, limit, search } = req.query;
