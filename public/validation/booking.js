@@ -47,7 +47,6 @@ export const createBookingValidation = Joi.object({
     remarks: Joi.string().optional().allow(""),
 });
 
-
 /* Edit booking validation */
 export const editBookingValidation = Joi.object({
     id: objectId.required(),

@@ -128,6 +128,21 @@ const bookingDetails = new mongoose.Schema({
         required: false,
         default: ""
     },
+    bookingStatus: {    // 0 - pending , 1 - completed, 2 - cancelled
+        type: Number,
+        required: false,
+        default: 0
+    },
+    driverExpense: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    driverExpenseRemarks: {
+        type: String,
+        required: false,
+        default: ""
+    },
     remarks: {
         type: String,
         required: false,

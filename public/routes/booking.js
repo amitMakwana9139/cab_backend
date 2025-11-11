@@ -14,4 +14,5 @@ router.patch("/editBooking", verifytoken, /* checkPermission("booking", "edit"),
 router.get("/getBookings", verifytoken, validateRequestForQuery(getBookingsValidation), getBookings);
 router.get("/getSingleBookingDetails", verifytoken, validateRequestForQuery(commonIdValidation), getSingleBooking);
 router.delete("/deleteBooking", verifytoken, validateRequestForQuery(commonIdValidation), removeSingleBooking);
+
 export default router;  

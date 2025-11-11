@@ -56,5 +56,14 @@ export const deleteBooking = async (id, userId) => {
     } catch (error) {
         throw new Error("Failed to delete single booking details!");
     }
+};
+
+export const findBookingById = async (id) => {
+    try {
+        const response = await Booking.findOne({ _id: id });
+        return response;
+    } catch (error) {
+        throw new Error("Failed to find booking details!");
+    }
 }
 

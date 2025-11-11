@@ -59,3 +59,13 @@ export const driverVehicleBookingList = async (pageLimit, skip, userId) => {
         throw new Error("Failed to get booking details!");
     }
 };
+
+/* Edit booking status by driver */
+export const updateBookingStatus = async (id, status) => {
+    try {
+        const response = await Booking.findByIdAndUpdate(id, { bookingStatus: status }, { new: true });
+        return response;
+    } catch (error) {
+        throw new Error("Failed to update booking status!");
+    }
+}

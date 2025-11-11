@@ -1,4 +1,5 @@
-import { deleteDriver, driverList, driverVehicleBookingList } from "../services/driver.js";
+import { findBookingById } from "../services/booking.js";
+import { deleteDriver, driverList, driverVehicleBookingList, updateBookingStatus } from "../services/driver.js";
 import { getUser } from "../services/superAdmin.js";
 
 /* Delete single driver details */
@@ -91,3 +92,22 @@ export const getAssignBooking = async (req, res) => {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
     }
 };
+
+/* Edit booking status by driver */
+export const editBookingStatus = async (req, res) => {
+    const { id, status } = req.body;
+    try {
+        const isBookingExist = await findBookingById(id);
+        if (!isBookingExist) {
+            return res.status(404).json({ status: 404, success: false, message: "Booking details not found!", data: {} });
+        }
+        const response = await updateBookingStatus(id, status);
+        if (response) {
+            return res.status(200).json({ status: 200, success: true, message: "Booking status updated successfully.", data: {} });
+        } else {
+            return res.status(500).json({ status: 500, success: false, message: "Booking status not updated!", data: {} });
+        }
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
+}

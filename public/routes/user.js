@@ -10,7 +10,7 @@ const router = new Router();
 /* Create user API */
 router.post("/createCustomer", verifytoken, validateRequest(createUserValidation), createCustomer);
 router.get("/getCustomerList", verifytoken, validateRequestForQuery(paginationValidation), getCustomerList);
-router.put("/editCustomer", verifytoken, validateRequest(editUserValidation), editCustomer);
+router.put("/editUser", verifytoken, validateRequest(editUserValidation), editCustomer);
 router.delete("/deleteCustomer", verifytoken, validateRequestForQuery(commonIdValidation), deleteCustomer);
 
 
