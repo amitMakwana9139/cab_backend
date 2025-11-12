@@ -54,3 +54,42 @@ export const editUserValidation = Joi.object({
             'object.base': 'Permissions must be a valid object',
         }).optional(),
 });
+
+/* Send otp API with validation */
+export const sendOtpValidation = Joi.object({
+    mobile: Joi.string()
+        .pattern(/^[0-9]{10}$/) // only digits, exactly 10 characters
+        .required()
+        .messages({
+            'string.pattern.base': 'Mobile number must contain exactly 10 digits',
+            'string.empty': 'Mobile number is required',
+            'any.required': 'Mobile number is required',
+        })
+});
+
+/* Verify otp API with validation */
+export const verifyOtpValidation = Joi.object({
+    mobile: Joi.string()
+        .pattern(/^[0-9]{10}$/) // only digits, exactly 10 characters
+        .required()
+        .messages({
+            'string.pattern.base': 'Mobile number must contain exactly 10 digits',
+            'string.empty': 'Mobile number is required',
+            'any.required': 'Mobile number is required',
+        }),
+    otp: Joi.number().required()
+});
+
+/* Forgot password API with validation */
+export const forgotPasswordValidation = Joi.object({
+    mobile: Joi.string()
+        .pattern(/^[0-9]{10}$/) // only digits, exactly 10 characters
+        .required()
+        .messages({
+            'string.pattern.base': 'Mobile number must contain exactly 10 digits',
+            'string.empty': 'Mobile number is required',
+            'any.required': 'Mobile number is required',
+        }),
+    newPassword: Joi.string().required(),
+    confirmPassword: Joi.string().required(),
+});

@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { validateRequest, validateRequestForQuery } from "../middelware/validation.js";
 import { verifytoken } from "../utills/jwt.helper.js";
-import { createUserValidation, editUserValidation } from "../validation/user.js";
-import { createCustomer, deleteCustomer, editCustomer, getCustomerList, getUserList } from "../controllers/user.js";
+import { createUserValidation, editUserValidation, forgotPasswordValidation, sendOtpValidation, verifyOtpValidation } from "../validation/user.js";
+import { createCustomer, deleteCustomer, editCustomer, forgotPassword, getCustomerList, getUserList, sendOtp, verifyOtp } from "../controllers/user.js";
 import { commonIdValidation, paginationValidation } from "../validation/common.js";
 
 const router = new Router();
@@ -16,4 +16,10 @@ router.delete("/deleteCustomer", verifytoken, validateRequestForQuery(commonIdVa
 
 /* get all user details */
 router.get("/getUserList", verifytoken, validateRequestForQuery(paginationValidation), getUserList);
+
+/* Forgot password */
+router.post("/sendOtp", validateRequest(sendOtpValidation), sendOtp);
+router.post("/verifyOtp", validateRequest(verifyOtpValidation), verifyOtp);
+router.put("/forgotPassword", validateRequest(forgotPasswordValidation), forgotPassword);
+
 export default router;  

@@ -1,4 +1,5 @@
-import { getUser } from "../services/superAdmin.js";
+import { decryptData, encryptData } from "../common/randomPassword.js";
+import { editOtp, getUser } from "../services/superAdmin.js";
 import { addCustomer, customerList, deleteCustomerById, editCustomerById, userList } from "../services/user.js";
 
 /* Create user API by super admin and admin */
@@ -55,7 +56,7 @@ export const getCustomerList = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
     }
-}
+};
 
 /* Edit customer details API with validation */
 export const editCustomer = async (req, res) => {
@@ -80,7 +81,7 @@ export const editCustomer = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
     }
-}
+};
 
 /* Delete customer API with validation */
 export const deleteCustomer = async (req, res) => {
@@ -99,7 +100,7 @@ export const deleteCustomer = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
     }
-}
+};
 
 /* Get customer list API with validation */
 export const getUserList = async (req, res) => {
@@ -131,6 +132,71 @@ export const getUserList = async (req, res) => {
                     page: 0
                 }
             });
+        }
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
+};
+
+/* Send otp by mobile number */
+export const sendOtp = async (req, res) => {
+    const body = req.body;
+    let otp = 456789; //generateOtp();
+    try {
+        const isUserExist = await getUser({ mobile: body.mobile, isDeleted: 0 });
+        if (!isUserExist || Object.keys(isUserExist).length === 0) {
+            return res.status(404).json({ status: 404, success: false, message: "User not found!", data: {} });
+        }
+
+        const response = await editOtp(body.mobile, otp);
+        if (response) {
+            return res.status(200).json({ status: 200, success: true, message: "OTP sent successfully!", data: response });
+        } else {
+            return res.status(500).json({ status: 500, success: false, message: "OTP not sent!", data: {} });
+        }
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
+};
+
+/* Otp verify by mobile number and otp */
+export const verifyOtp = async (req, res) => {
+    const body = req.body;
+    try {
+        const isUserExist = await getUser({ mobile: body.mobile, isDeleted: 0 });
+        if (!isUserExist || Object.keys(isUserExist).length === 0) {
+            return res.status(404).json({ status: 404, success: false, message: "User not found!", data: {} });
+        }
+
+        if (isUserExist.otp !== body.otp) {
+            return res.status(409).json({ status: 409, success: false, message: "Invalid otp!", data: {} });
+        } else {
+            return res.status(200).json({ status: 200, success: true, message: "Otp verify succesfully!", data: {} });
+        }
+
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
+};
+
+/* Forgot password API with validation  */
+export const forgotPassword = async (req, res) => {
+    const body = req.body;
+    try {
+        const isUserExist = await getUser({ mobile: body.mobile, isDeleted: 0 });
+        if (!isUserExist || Object.keys(isUserExist).length === 0) {
+            return res.status(404).json({ status: 404, success: false, message: "User not found!", data: {} });
+        }
+
+        if (body.newPassword !== body.confirmPassword) {
+            return res.status(409).json({ status: 409, success: false, message: "Please enter valid password!", data: {} });
+        }
+        const encryptPassword = await encryptData(body.newPassword);
+        const response = await editCustomerById({ id: isUserExist._id, password: encryptPassword });
+        if (response) {
+            return res.status(200).json({ status: 200, success: true, message: "Password edit succesfully.", data: {} });
+        } else {
+            return res.status(404).json({ status: 404, success: false, message: "Password not edit!", data: {} });
         }
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });

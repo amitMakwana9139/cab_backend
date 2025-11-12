@@ -31,7 +31,7 @@ export const driverList = async (pageLimit, skip, search) => {
 export const driverVehicleBookingList = async (pageLimit, skip, userId) => {
     try {
 
-        const query = { createdBy: userId, isDeleted: 0 };
+        const query = { driverId: userId, isDeleted: 0 };
         // if (startDate && endDate) {
         //     const start = new Date(`${startDate}T00:00:00Z`);
         //     const end = new Date(`${endDate}T23:59:59Z`);

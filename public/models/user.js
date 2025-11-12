@@ -55,6 +55,11 @@ const userDetails = new mongoose.Schema({
         required: false,
         default: ""
     },
+    otp: {
+        type: Number,
+        required: false,
+        default: null
+    },
     meta: {
         type: String,
         required: false,

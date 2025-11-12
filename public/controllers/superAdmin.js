@@ -1,4 +1,4 @@
-import { encryptData } from "../common/randomPassword.js";
+import { decryptData, encryptData } from "../common/randomPassword.js";
 import { createSuperAdmin, getUser } from "../services/superAdmin.js";
 import { authToken } from "../utills/jwt.helper.js";
 
@@ -32,8 +32,8 @@ export const userLogin = async (req, res) => {
         if (!isUserExist) {
             return res.status(400).json({ status: 400, success: false, message: "User does not exist!", data: {} });
         } else {
-            let decryptPassword = "123456";
-            // let decryptPassword = await decryptData(isUserExist.password);
+            // let decryptPassword = "123456";
+            let decryptPassword = await decryptData(isUserExist.password);
             if (decryptPassword !== password) {
                 return res.status(500).json({ status: 500, success: false, message: "Invalid login credintial!", data: {} });
             } else {
