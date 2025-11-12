@@ -49,13 +49,24 @@ export const deleteCustomerById = async (id) => {
 /* Get all user list */
 export const userList = async (pageLimit, skip, search) => {
     try {
-        const getUserList = await User.find({ isDeleted: 0 })
+        // Build the base query
+        const query = { isDeleted: 0 };
+
+        // Add search filter if search term exists
+        if (search && search.trim() !== "") {
+            query.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { mobile: { $regex: search, $options: "i" } },
+            ];
+        }
+
+        const getUserList = await User.find(query)
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })
             .select({ name: 1, mobile: 1, email: 1, role: 1, image: 1, profileImage: 1, theme: 1, createdAt: 1, permissions: 1 })
             .lean();
-        const totalCount = await User.countDocuments({ isDeleted: 0 });
+        const totalCount = await User.countDocuments(query);
         return { getUserList, totalCount };
     } catch (error) {
         throw new Error("Failed to get customer details!");
