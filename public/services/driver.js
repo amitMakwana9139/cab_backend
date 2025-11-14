@@ -12,15 +12,28 @@ export const deleteDriver = async (id) => {
 };
 
 /* Get driver list for super Admin */
-export const driverList = async (pageLimit, skip, search) => {
+export const driverList = async (pageLimit, skip, search, user) => {
     try {
-        const getDriverList = await User.find({ role: "driver", isDeleted: 0 })
+        const query = { role: "driver", isDeleted: 0 };
+
+        if (search && search.trim() !== "") {
+            query.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { mobile: { $regex: search, $options: "i" } },
+            ];
+        }
+
+        if (user.role !== "superAdmin") {
+            query.createdBy = user._id;
+        }
+
+        const getDriverList = await User.find(query)
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })
             .select({ name: 1, email: 1, mobile: 1, profileImage: 1, createdAt: 1 })
             .lean();
-        const totalCount = await User.countDocuments({ role: "driver", isDeleted: 0 });
+        const totalCount = await User.countDocuments(query);
         return { getDriverList, totalCount };
     } catch (error) {
         throw new Error("Failed to get booking details!");

@@ -29,7 +29,7 @@ export const getCustomerList = async (req, res) => {
         const pageNumber = Number(page ?? 1);
         const pageLimit = Number(limit ?? 1);
         const skip = (pageNumber - 1) * pageLimit;
-        const response = await customerList(pageLimit, skip, search);
+        const response = await customerList(pageLimit, skip, search, req.user);
         if (response && response.getCustomerList?.length > 0) {
             res.status(200).json({
                 status: 200,

@@ -95,7 +95,7 @@ export const getBookingsValidation = Joi.object({
         .allow(null, "") // allow empty or null
         .optional(),
     endDate: Joi.string()
-        .pattern(/^\d{4}-\d{2}-\d{2}$/)
-        .allow(null, "")
+        .pattern(/^\d{4}-\d{2}-\d{2}$/) // yyyy-mm-dd format
+        .allow(null, "")      // allow empty or null
         .optional(),
 });

@@ -38,7 +38,7 @@ export const getBookings = async (req, res) => {
         const pageNumber = Number(page ?? 1);
         const pageLimit = Number(limit ?? 1);
         const skip = (pageNumber - 1) * pageLimit;
-        const response = await bookingList(pageLimit, skip, search, startDate, endDate, req.user.id);
+        const response = await bookingList(pageLimit, skip, search, startDate, endDate, req.user);
         if (response && response.getCabBookingList?.length > 0) {
             res.status(200).json({
                 status: 200,

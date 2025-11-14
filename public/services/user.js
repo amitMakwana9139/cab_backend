@@ -11,15 +11,28 @@ export const addCustomer = async (body) => {
 }
 
 /* Get customer list */
-export const customerList = async (pageLimit, skip, search) => {
+export const customerList = async (pageLimit, skip, search, user) => {
     try {
-        const getCustomerList = await User.find({ isDeleted: 0, role: "customer" })
+        const query = { isDeleted: 0, role: "customer" };
+
+        if (search && search.trim() !== "") {
+            query.$or = [
+                { name: { $regex: search, $options: "i" } },
+                { mobile: { $regex: search, $options: "i" } },
+            ];
+        }
+
+        if (user.role !== "superAdmin") {
+            query.createdBy = user._id;
+        }
+
+        const getCustomerList = await User.find(query)
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })
             .select({ name: 1, mobile: 1, profileImage: 1, createdAt: 1 })
             .lean();
-        const totalCount = await User.countDocuments({ isDeleted: 0, role: "customer" });
+        const totalCount = await User.countDocuments(query);
         return { getCustomerList, totalCount };
     } catch (error) {
         throw new Error("Failed to get customer details!");

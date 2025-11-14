@@ -41,15 +41,24 @@ export const editVehicleData = async (body) => {
 }
 
 /* Get vehicle details */
-export const vehicleList = async (pageLimit, skip, search, userId) => {
+export const vehicleList = async (pageLimit, skip, search, user) => {
     try {
-        const getVehicleList = await Vehicle.find({ /* createdBy: userId, */ isDeleted: 0 })
+        const query = { isDeleted: 0 };
+
+        if (search && search.trim() !== "") {
+            query.vehicleName = { $regex: search, $options: "i" }
+        }
+        if (user.role !== "superAdmin") {
+            query.createdBy = user._id;
+        }
+
+        const getVehicleList = await Vehicle.find(query)
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })
             .select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0, createdBy: 0 })
             .lean();
-        const totalCount = await Vehicle.countDocuments({ isDeleted: 0 });
+        const totalCount = await Vehicle.countDocuments(query);
         return { getVehicleList, totalCount };
     } catch (error) {
         throw new Error("Failed to get booking details!");

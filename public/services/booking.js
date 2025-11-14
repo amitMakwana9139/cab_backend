@@ -18,15 +18,21 @@ export const editCabBooking = async (obj) => {
     }
 }
 
-export const bookingList = async (pageLimit, skip, search, startDate, endDate, userId) => {
+export const bookingList = async (pageLimit, skip, search, startDate, endDate, user) => {
     try {
-
-        const query = { createdBy: userId, isDeleted: 0 };
+        const query = { isDeleted: 0 };
         if (startDate && endDate) {
             const start = new Date(`${startDate}T00:00:00Z`);
             const end = new Date(`${endDate}T23:59:59Z`);
             query.createdAt = { $gte: start, $lte: end };
         }
+        if (search) {
+            query.customerName = { $regex: search, $options: "i" }
+        }
+        if (user.role !== "superAdmin") {
+            query.createdBy = user._id;
+        }
+
         const getCabBookingList = await Booking.find(query)
             .limit(pageLimit)
             .skip(skip)
