@@ -31,7 +31,7 @@ export const driverList = async (pageLimit, skip, search, user) => {
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })
-            .select({ name: 1, email: 1, mobile: 1, profileImage: 1, createdAt: 1 })
+            .select({ name: 1, email: 1, mobile: 1, profileImage: 1, createdAt: 1, isBlock: 1 })
             .lean();
         const totalCount = await User.countDocuments(query);
         return { getDriverList, totalCount };

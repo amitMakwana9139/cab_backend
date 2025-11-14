@@ -1,5 +1,5 @@
 import { decryptData, encryptData } from "../common/randomPassword.js";
-import { createSuperAdmin, getUser } from "../services/superAdmin.js";
+import { createSuperAdmin, editDriver, getUser } from "../services/superAdmin.js";
 import { authToken } from "../utills/jwt.helper.js";
 
 /* Register super admin API  */
@@ -71,3 +71,23 @@ export const createUser = async (req, res) => {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
     }
 };
+
+
+/* Add driver in blacklist */
+export const blacklistDriver = async (req, res) => {
+    const body = req.body;
+    try {
+        const isUserExist = await getUser({ _id: body.id, role: "driver" });
+        if (!isUserExist) {
+            return res.status(404).json({ status: 404, success: false, message: "User not exist!", data: {} });
+        }
+        const response = await editDriver(body);
+        if (response) {
+            return res.status(200).json({ status: 200, success: true, message: `Driver ${body.isBlock === 1 ? "block" : "unBlock"} succesfully!`, data: {} });
+        } else {
+            return res.status(500).json({ status: 500, success: false, message: `Driver not ${body.isBlock === 1 ? "block" : "unBlock"}!`, data: {} });
+        }
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
+}

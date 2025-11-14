@@ -61,3 +61,9 @@ export const createAdminValidation = Joi.object({
     theme: Joi.string().optional(),
     role: Joi.number().integer().required().valid(2, 3, 4)
 });
+
+/* Add driver in blacklist validation */
+export const blockDriverValidation = Joi.object({
+    id: Joi.string().required(),
+    isBlock: Joi.number().integer().required().valid(0, 1),
+});

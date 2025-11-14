@@ -16,4 +16,5 @@ router.get("/getAssignBookings", verifytoken, validateRequestForQuery(pagination
 
 /* Edit booking status by driver */
 router.put("/editBookingStatus", verifytoken, validateRequest(bookingStatusChangeValidation), editBookingStatus);
+
 export default router;  
