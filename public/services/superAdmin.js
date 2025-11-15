@@ -2,9 +2,9 @@ import Booking from "../models/booking.js";
 import User from "../models/user.js";
 import Vehicle from "../models/vehicle.js";
 
-export const getUser = async (obj) => {
+export const getUser = async (obj, select = { isDeleted: 0 }) => {
     try {
-        const response = await User.findOne(obj);
+        const response = await User.findOne(obj).select(select);
         return response;
     } catch (error) {
         throw new Error("Failed to get user!");

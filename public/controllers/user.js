@@ -201,4 +201,18 @@ export const forgotPassword = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
     }
+};
+
+/* Get user profile  */
+export const getUserProfile = async (req, res) => {
+    try {
+        const response = await getUser({ _id: req.user._id }, { name: 1, email: 1, mobile: 1, image: 1, password: 1, permissions: 1 });
+        if (response && Object.keys(response).length > 0) {
+            return res.status(200).json({ status: 200, success: true, message: "User profile get succesfully!", data: response });
+        } else {
+            return res.status(404).json({ status: 404, success: false, message: "Internal server error", data: {} });
+        }
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
 }
