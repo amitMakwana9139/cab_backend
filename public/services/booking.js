@@ -71,5 +71,5 @@ export const findBookingById = async (id) => {
     } catch (error) {
         throw new Error("Failed to find booking details!");
     }
-}
+};
 

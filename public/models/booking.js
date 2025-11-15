@@ -59,7 +59,7 @@ const bookingDetails = new mongoose.Schema({
     totalPassenger: {
         type: Number,
         required: false,
-        default: ""
+        default: 0
     },
     totalLuggage: {
         type: Number,
@@ -74,7 +74,7 @@ const bookingDetails = new mongoose.Schema({
     vendorPrice: {
         type: Number,
         required: false,
-        default: ""
+        default: 0
     },
     bookingPrice: {
         type: Number,
@@ -95,7 +95,7 @@ const bookingDetails = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: false,
         ref: "vehicle",
-        default: ""
+        default: null
     },
     vehicleNumber: {
         type: String,
@@ -116,7 +116,7 @@ const bookingDetails = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: false,
         ref: "user",
-        default: ""
+        default: null
     },
     driverNumber: {
         type: String,

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { validateRequest } from "../middelware/validation.js";
 import { blockDriverValidation, createAdminValidation, createSuperAdminValidation, signinSuperAdminValidation } from "../validation/superAdmin.js";
-import { blacklistDriver, createUser, registerSuperAdmin, userLogin } from "../controllers/superAdmin.js";
+import { blacklistDriver, createUser, getDashboard, registerSuperAdmin, userLogin } from "../controllers/superAdmin.js";
 import { verifytoken } from "../utills/jwt.helper.js";
 
 const router = new Router();
@@ -13,5 +13,8 @@ router.post("/createUser", verifytoken, validateRequest(createAdminValidation), 
 
 /* Block driver */
 router.put("/blacklistDriver", verifytoken, validateRequest(blockDriverValidation), blacklistDriver);
+
+/* Get dashboard details */
+router.get("/getDashboard", verifytoken, getDashboard);
 
 export default router;  

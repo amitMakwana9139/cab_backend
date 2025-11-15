@@ -1,5 +1,5 @@
 import { decryptData, encryptData } from "../common/randomPassword.js";
-import { createSuperAdmin, editDriver, getUser } from "../services/superAdmin.js";
+import { createSuperAdmin, editDriver, getDashboardDetails, getUser } from "../services/superAdmin.js";
 import { authToken } from "../utills/jwt.helper.js";
 
 /* Register super admin API  */
@@ -87,6 +87,30 @@ export const blacklistDriver = async (req, res) => {
         } else {
             return res.status(500).json({ status: 500, success: false, message: `Driver not ${body.isBlock === 1 ? "block" : "unBlock"}!`, data: {} });
         }
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
+};
+
+/* Get dashboard details of superAdmin */
+export const getDashboard = async (req, res) => {
+    try {
+        if (req.user.role !== "superAdmin") {
+            return res.status(401).json({ status: 401, success: false, message: "You have no rights to get data!", data: {} });
+        }
+
+        const { totalBooking, totalUser, userList, carList } = await getDashboardDetails();
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            message: "Dashboard data get succesfully!",
+            data: {
+                totalBooking,
+                totalUser,
+                userList,
+                carList
+            }
+        })
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
     }
