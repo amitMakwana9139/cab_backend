@@ -59,7 +59,9 @@ export const createAdminValidation = Joi.object({
             'object.base': 'Permissions must be a valid object',
         }).required(),
     theme: Joi.string().optional(),
-    role: Joi.number().integer().required().valid(2, 3, 4)
+    drivingLicense: Joi.array().items(Joi.string()).optional().allow(""),
+    aadharImage: Joi.array().items(Joi.string()).optional().allow(""),
+    role: Joi.number().integer().required().valid(2, 3, 4),
 });
 
 /* Add driver in blacklist validation */

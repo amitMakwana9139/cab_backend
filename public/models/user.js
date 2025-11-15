@@ -39,6 +39,16 @@ const userDetails = new mongoose.Schema({
         required: false,
         default: []
     },
+    drivingLicense: {
+        type: Array,
+        required: false,
+        default: []
+    },
+    aadharImage: {
+        type: Array,
+        required: false,
+        default: []
+    },
     profileImage: {
         type: String,
         required: false,
