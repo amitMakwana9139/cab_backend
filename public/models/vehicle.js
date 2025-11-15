@@ -63,6 +63,11 @@ const vehicleDetails = new mongoose.Schema({
         required: false,
         default: 0
     },
+    blockReason: {
+        type: String,
+        required: false,
+        default: ""
+    },
     isDeleted: {
         type: Number,
         required: false,

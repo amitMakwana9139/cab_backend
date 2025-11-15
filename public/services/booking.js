@@ -33,11 +33,11 @@ export const bookingList = async (pageLimit, skip, search, startDate, endDate, u
             query.createdBy = user._id;
         }
 
-        const getCabBookingList = await Booking.find(query)
+        const getCabBookingList = await Booking.find(query).populate({ path: "createdBy", select: "name email mobile" })
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })
-            .select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0, createdBy: 0 })
+            .select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0 })
             .lean();
         const totalCount = await Booking.countDocuments(query);
         return { getCabBookingList, totalCount };
@@ -48,7 +48,9 @@ export const bookingList = async (pageLimit, skip, search, startDate, endDate, u
 
 export const singleBooking = async (id, userId) => {
     try {
-        const response = await Booking.findById({ _id: id, createdBy: userId, isDeleted: 0 }).select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0, createdBy: 0 });
+        const response = await Booking.findById({ _id: id, createdBy: userId, isDeleted: 0 })
+            .populate({ path: "createdBy", select: "name email mobile" })
+            .select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0 });
         return response;
     } catch (error) {
         throw new Error("Failed to get single booking details!");

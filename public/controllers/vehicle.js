@@ -1,5 +1,6 @@
 import {
     addVehicleData,
+    addVehicleInBlacklist,
     checkVehicle,
     deleteVehicleById,
     editVehicleData,
@@ -97,4 +98,23 @@ export const deleteVehicle = async (req, res) => {
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
     }
-}
+};
+
+/* Add driver in blacklist */
+export const blacklistVehicle = async (req, res) => {
+    const body = req.body;
+    try {
+        const isVehicleExist = await getVehicleById(body.id);
+        if (!isVehicleExist) {
+            return res.status(404).json({ status: 404, success: false, message: "Vehicle not exist!", data: {} });
+        }
+        const response = await addVehicleInBlacklist(body);
+        if (response) {
+            return res.status(200).json({ status: 200, success: true, message: `Vehicle ${body.isBlock === 1 ? "blacklisted" : "unBlock"} succesfully!`, data: {} });
+        } else {
+            return res.status(500).json({ status: 500, success: false, message: `Vehicle not ${body.isBlock === 1 ? "blacklisted" : "unBlock"}!`, data: {} });
+        }
+    } catch (error) {
+        return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
+    }
+};

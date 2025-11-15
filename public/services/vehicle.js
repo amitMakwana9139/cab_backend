@@ -56,12 +56,12 @@ export const vehicleList = async (pageLimit, skip, search, user) => {
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })
-            .select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0, createdBy: 0 })
+            .select({ isDeleted: 0, __v: 0, meta: 0, createdBy: 0 })
             .lean();
         const totalCount = await Vehicle.countDocuments(query);
         return { getVehicleList, totalCount };
     } catch (error) {
-        throw new Error("Failed to get booking details!");
+        throw new Error("Failed to get vehicle details!");
     }
 };
 
@@ -73,4 +73,21 @@ export const deleteVehicleById = async (id, userId) => {
     } catch (error) {
         throw new Error("Failed to delete single booking details!");
     }
-}
+};
+
+/* Add vehicle in blacklist */
+export const addVehicleInBlacklist = async (body) => {
+    try {
+        const response = await Vehicle.findOneAndUpdate(
+            { _id: body.id },
+            {
+                isBlock: body.isBlock,
+                blockReason: +body.isBlock === 1 ? body.blockReason : ""
+            },
+            { new: true }
+        );
+        return response;
+    } catch (error) {
+        throw new Error("Failed to send otp in mobile number!");
+    }
+};

@@ -68,4 +68,9 @@ export const createAdminValidation = Joi.object({
 export const blockDriverValidation = Joi.object({
     id: Joi.string().required(),
     isBlock: Joi.number().integer().required().valid(0, 1),
+    blockReason: Joi.string().when("isBlock", {
+        is: 1,
+        then: Joi.required(),
+        otherwise: Joi.optional().allow('')
+    })
 });

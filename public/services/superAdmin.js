@@ -31,10 +31,10 @@ export const editOtp = async (mobile, otp) => {
 
 export const editDriver = async (body) => {
     try {
-        const response = await User.findOneAndUpdate({ _id: body.id }, { isBlock: body.isBlock }, { new: true });
+        const response = await User.findOneAndUpdate({ _id: body.id }, { isBlock: body.isBlock, blockReason: +body.isBlock === 1 ? body.blockReason : "" }, { new: true });
         return response;
     } catch (error) {
-        throw new Error("Failed to send otp in mobile number!");
+        throw new Error("Failed to add driver in blacklist!");
     }
 };
 
