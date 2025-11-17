@@ -73,7 +73,10 @@ export const userList = async (pageLimit, skip, search) => {
             ];
         }
 
-        const getUserList = await User.find(query)
+        const getUserList = await User.find(query).populate({
+            path: "createdBy",
+            select: "name email mobile"
+        })
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })

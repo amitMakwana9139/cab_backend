@@ -57,7 +57,7 @@ const userDetails = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         required: false,
-        ref: "user",
+        ref: "User",
         default: null
     },
     theme: {

@@ -51,6 +51,11 @@ const bookingDetails = new mongoose.Schema({
         required: false,
         default: ""
     },
+    multipleStop: {
+        type: Array,
+        required: false,
+        default: []
+    },
     dropLocation: {
         type: String,
         required: false,
