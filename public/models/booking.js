@@ -148,6 +148,17 @@ const bookingDetails = new mongoose.Schema({
         required: false,
         default: ""
     },
+    cancelReason: {
+        type: String,
+        required: false,
+        default: ""
+    },
+    cancelBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: false,
+        ref: "user",
+        default: null
+    },
     remarks: {
         type: String,
         required: false,
@@ -158,6 +169,11 @@ const bookingDetails = new mongoose.Schema({
         required: false,
         ref: "User",
         default: null
+    },
+    parentAdmin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
     meta: {
         type: String,

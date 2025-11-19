@@ -95,13 +95,13 @@ export const getAssignBooking = async (req, res) => {
 
 /* Edit booking status by driver */
 export const editBookingStatus = async (req, res) => {
-    const { id, status } = req.body;
+    const { id, status, reason } = req.body;
     try {
         const isBookingExist = await findBookingById(id);
         if (!isBookingExist) {
             return res.status(404).json({ status: 404, success: false, message: "Booking details not found!", data: {} });
         }
-        const response = await updateBookingStatus(id, status);
+        const response = await updateBookingStatus(id, status, reason, req.user.id);
         if (response) {
             return res.status(200).json({ status: 200, success: true, message: "Booking status updated successfully.", data: {} });
         } else {

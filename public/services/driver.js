@@ -28,6 +28,7 @@ export const driverList = async (pageLimit, skip, search, user) => {
         }
 
         const getDriverList = await User.find(query)
+            .populate({ path: "createdBy", select: "name email mobile" })
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })
@@ -74,9 +75,9 @@ export const driverVehicleBookingList = async (pageLimit, skip, userId) => {
 };
 
 /* Edit booking status by driver */
-export const updateBookingStatus = async (id, status) => {
+export const updateBookingStatus = async (id, status, reason, userId) => {
     try {
-        const response = await Booking.findByIdAndUpdate(id, { bookingStatus: status }, { new: true });
+        const response = await Booking.findByIdAndUpdate(id, { bookingStatus: status, cancelBy: userId, cancelReason: reason }, { new: true });
         return response;
     } catch (error) {
         throw new Error("Failed to update booking status!");
