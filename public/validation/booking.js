@@ -22,8 +22,14 @@ export const createBookingValidation = Joi.object({
             'string.empty': 'Mobile number is required',
             'any.required': 'Mobile number is required',
         }),
-    tripStartDate: Joi.string().required(),
-    tripEndDate: Joi.string().required(),
+    tripStartDate: Joi.string()
+        .pattern(/^\d{2}-\d{2}-\d{4}$/) // yyyy-mm-dd format
+        .allow(null, "") // allow empty or null
+        .required(),
+    tripEndDate: Joi.string()
+        .pattern(/^\d{2}-\d{2}-\d{4}$/) // yyyy-mm-dd format
+        .allow(null, "") // allow empty or null
+        .optional(),
     time: Joi.string().required(),
     tripType: Joi.string().required(),
     carType: Joi.string().required(),
@@ -61,8 +67,14 @@ export const editBookingValidation = Joi.object({
             'string.empty': 'Mobile number is required',
             'any.required': 'Mobile number is required',
         }),
-    tripStartDate: Joi.string().optional(),
-    tripEndDate: Joi.string().optional(),
+    tripStartDate: Joi.string()
+        .pattern(/^\d{2}-\d{2}-\d{4}$/) // yyyy-mm-dd format
+        .allow(null, "") // allow empty or null
+        .optional(),
+    tripEndDate: Joi.string()
+        .pattern(/^\d{2}-\d{2}-\d{4}$/) // yyyy-mm-dd format
+        .allow(null, "") // allow empty or null
+        .optional(),
     time: Joi.string().optional(),
     tripType: Joi.string().optional(),
     carType: Joi.string().optional(),
@@ -98,5 +110,9 @@ export const getBookingsValidation = Joi.object({
     endDate: Joi.string()
         .pattern(/^\d{4}-\d{2}-\d{2}$/) // yyyy-mm-dd format
         .allow(null, "")      // allow empty or null
+        .optional(),
+    date: Joi.string()
+        .pattern(/^\d{2}-\d{2}-\d{4}$/) // yyyy-mm-dd format
+        .allow(null, "") // allow empty or null
         .optional(),
 });

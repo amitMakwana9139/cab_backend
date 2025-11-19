@@ -18,7 +18,7 @@ export const editCabBooking = async (obj) => {
     }
 }
 
-export const bookingList = async (pageLimit, skip, search, startDate, endDate, user) => {
+export const bookingList = async (pageLimit, skip, search, startDate, endDate, date, user) => {
     try {
         const query = { isDeleted: 0 };
         if (startDate && endDate) {
@@ -31,6 +31,27 @@ export const bookingList = async (pageLimit, skip, search, startDate, endDate, u
         }
         if (user.role !== "superAdmin") {
             query.createdBy = user._id;
+        }
+
+        if (date) {
+            query.$or = [
+                // Case 1: date between tripStartDate and tripEndDate
+                {
+                    $and: [
+                        { tripEndDate: { $nin: [null, ""] } },
+                        { tripStartDate: { $lte: date } },
+                        { tripEndDate: { $gte: date } }
+                    ]
+                },
+
+                // Case 2: tripEndDate is null AND exact match
+                {
+                    $and: [
+                        { tripEndDate: { $in: [null, ""] } },
+                        { tripStartDate: date }
+                    ]
+                }
+            ];
         }
 
         const getCabBookingList = await Booking.find(query).populate({ path: "createdBy", select: "name email mobile" })
