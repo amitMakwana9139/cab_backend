@@ -48,10 +48,12 @@ export const vehicleList = async (pageLimit, skip, search, user) => {
         if (search && search.trim() !== "") {
             query.vehicleName = { $regex: search, $options: "i" }
         }
-        if (user.role !== "superAdmin") {
+        if (user.role === "admin") {
             query.parentAdmin = user._id;
         }
-
+        if (user.role === "subAdmin") {
+            query.parentAdmin = user.parentAdmin;
+        }
         const getVehicleList = await Vehicle.find(query)
             .limit(pageLimit)
             .skip(skip)

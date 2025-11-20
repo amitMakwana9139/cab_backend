@@ -23,8 +23,11 @@ export const driverList = async (pageLimit, skip, search, user) => {
             ];
         }
 
-        if (user.role !== "superAdmin") {
-            query.parentAdmin = user.user._id;;
+        if (user.role === "admin") {
+            query.parentAdmin = user._id;
+        }
+        if (user.role === "subAdmin") {
+            query.parentAdmin = user.parentAdmin;
         }
 
         const getDriverList = await User.find(query)

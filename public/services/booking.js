@@ -29,8 +29,16 @@ export const bookingList = async (pageLimit, skip, search, startDate, endDate, d
         if (search) {
             query.customerName = { $regex: search, $options: "i" }
         }
-        if (user.role !== "superAdmin") {
+        if (user.role === "admin") {
             query.parentAdmin = user._id;
+        }
+        if (user.role === "subAdmin") {
+            query.parentAdmin = user.parentAdmin;
+        } if (user.role === "admin") {
+            query.parentAdmin = user._id;
+        }
+        if (user.role === "subAdmin") {
+            query.parentAdmin = user.parentAdmin;
         }
 
         if (date) {
