@@ -57,21 +57,29 @@ export const createUser = async (req, res) => {
         if (isUserExist) {
             return res.status(409).json({ status: 409, success: false, message: "User already exist!", data: {} });
         }
+
+        // Determine parentAdmin correctly
+        if (req.user.role === "admin") {
+            body.parentAdmin = req.user._id;               // admin creates subadmin/driver
+        } else if (req.user.role === "subAdmin") {
+            body.parentAdmin = req.user.parentAdmin;       // subadmin creates driver
+        } else if (req.user.role === "superAdmin") {
+            body.parentAdmin = req.user._id;               // superadmin creates admin
+        }
         body.role = +body.role === 2 ? "subAdmin" : +body.role === 0 ? "user" : +body.role === 4 ? "driver" : "admin";
         body.createdBy = req.user._id;
         body.theme = req.user.theme;
         body.password = await encryptData(randomePassword);
         const response = await createSuperAdmin(body);
         if (response) {
-            return res.status(200).json({ status: 200, success: true, message: `${+body.role === 2 ? "subAdmin" : +body.role === 0 ? "user" : +body.role === 4 ? "driver" : "admin"} create succesfully!`, data: {} });
+            return res.status(200).json({ status: 200, success: true, message: `${body.role} create succesfully!`, data: {} });
         } else {
-            return res.status(500).json({ status: 500, success: false, message: `${+body.role === 2 ? "subAdmin" : +body.role === 0 ? "user" : +body.role === 4 ? "driver" : "admin"} not create!`, data: {} });
+            return res.status(500).json({ status: 500, success: false, message: `${body.role} not create!`, data: {} });
         }
     } catch (error) {
         return res.status(500).json({ status: 500, success: false, message: "Internal server error", data: {} });
     }
 };
-
 
 /* Add driver in blacklist */
 export const blacklistDriver = async (req, res) => {
@@ -95,11 +103,11 @@ export const blacklistDriver = async (req, res) => {
 /* Get dashboard details of superAdmin */
 export const getDashboard = async (req, res) => {
     try {
-        if (req.user.role !== "superAdmin") {
+        if (req.user.role !== "admin") {
             return res.status(401).json({ status: 401, success: false, message: "You have no rights to get data!", data: {} });
         }
 
-        const { totalBooking, totalUser, userList, carList } = await getDashboardDetails();
+        const { totalBooking, totalUser, userList, carList } = await getDashboardDetails(req.user);
         return res.status(200).json({
             status: 200,
             success: true,

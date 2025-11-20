@@ -60,6 +60,12 @@ const userDetails = new mongoose.Schema({
         ref: "User",
         default: null
     },
+    parentAdmin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: false,
+        default: null
+    },
     theme: {
         type: String,
         required: false,

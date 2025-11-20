@@ -50,8 +50,13 @@ const vehicleDetails = new mongoose.Schema({
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         required: false,
-        ref: "user",
+        ref: "User",
         default: null
+    },
+    parentAdmin: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
     },
     meta: {
         type: String,
