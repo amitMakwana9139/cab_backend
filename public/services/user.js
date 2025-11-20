@@ -23,7 +23,7 @@ export const customerList = async (pageLimit, skip, search, user) => {
         }
 
         if (user.role !== "superAdmin") {
-            query.parentAdmin = user.parentAdmin;
+            query.parentAdmin = user._id;
         }
 
         const getCustomerList = await User.find(query)

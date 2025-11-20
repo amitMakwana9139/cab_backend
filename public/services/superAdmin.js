@@ -41,10 +41,10 @@ export const editDriver = async (body) => {
 /* Get dashobard details for superAdmin */
 export const getDashboardDetails = async (user) => {
     try {
-        const totalBooking = await Booking.countDocuments({ isDeleted: 0, parentAdmin: user.parentAdmin });
-        const totalUser = await User.countDocuments({ isDeleted: 0, parentAdmin: user.parentAdmin, role: { $ne: "superAdmin" } });
-        const userList = await User.find({ isDeleted: 0, parentAdmin: user.parentAdmin, role: { $ne: "superAdmin" } }).select({ name: 1, email: 1, mobile: 1, profileImage: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(5);
-        const carList = await Vehicle.find({ isDeleted: 0, parentAdmin: user.parentAdmin }).select({ vehicleImage: 1, vehicleName: 1, vehicleNumber: 1, vehicleType: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(5);
+        const totalBooking = await Booking.countDocuments({ isDeleted: 0, parentAdmin: user._id });
+        const totalUser = await User.countDocuments({ isDeleted: 0, parentAdmin: user._id, role: { $ne: "superAdmin" } });
+        const userList = await User.find({ isDeleted: 0, parentAdmin: user._id, role: { $ne: "superAdmin" } }).select({ name: 1, email: 1, mobile: 1, profileImage: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(5);
+        const carList = await Vehicle.find({ isDeleted: 0, parentAdmin: user._id }).select({ vehicleImage: 1, vehicleName: 1, vehicleNumber: 1, vehicleType: 1, createdAt: 1 }).sort({ createdAt: -1 }).limit(5);
 
         return { totalBooking, totalUser, userList, carList };
     } catch (error) {
