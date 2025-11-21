@@ -21,9 +21,11 @@ export const customerList = async (pageLimit, skip, search, user) => {
                 { mobile: { $regex: search, $options: "i" } },
             ];
         }
-
-        if (user.role !== "superAdmin") {
+        if (user.role === "admin") {
             query.parentAdmin = user._id;
+        }
+        if (user.role === "subAdmin") {
+            query.parentAdmin = user.parentAdmin;
         }
 
         const getCustomerList = await User.find(query)

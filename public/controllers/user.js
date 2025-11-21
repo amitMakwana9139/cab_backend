@@ -8,7 +8,7 @@ export const createCustomer = async (req, res) => {
     try {
         body.role = "customer";
         body.createdBy = req.user._id;
-        body.parentAdmin = req.user.parentAdmin;
+        body.parentAdmin = req.user.role === "admin" ? req.user._id : req.user.parentAdmin;
         const isUserExist = await getUser({ mobile: body.mobile });
         if (isUserExist && Object.keys(isUserExist).length > 0) {
             return res.status(409).json({ status: 409, success: false, message: "User already exist!", data: {} });
