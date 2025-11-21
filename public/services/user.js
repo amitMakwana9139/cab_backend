@@ -82,6 +82,9 @@ export const userList = async (pageLimit, skip, search, user) => {
             query.parentAdmin = user.parentAdmin;
         }
 
+        if (user.role === "superAdmin") {
+            query.role = "admin";
+        }
         const getUserList = await User.find(query).populate({
             path: "createdBy",
             select: "name email mobile"
