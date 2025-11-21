@@ -3,7 +3,7 @@ import { validateRequest, validateRequestForQuery } from "../middelware/validati
 import { verifytoken } from "../utills/jwt.helper.js";
 import { commonIdValidation, paginationValidation } from "../validation/common.js";
 import { editBookingStatus, getAssignBooking, getDrivers, removeDriver } from "../controllers/driver.js";
-import { bookingStatusChangeValidation } from "../validation/driver.js";
+import { assignBookingsValidation, bookingStatusChangeValidation } from "../validation/driver.js";
 
 const router = new Router();
 
@@ -12,7 +12,7 @@ router.get("/getDriverDetails", verifytoken, validateRequestForQuery(paginationV
 router.delete("/deleteDriver", verifytoken, validateRequestForQuery(commonIdValidation), removeDriver);
 
 /* Get assign booking details of driver */
-router.get("/getAssignBookings", verifytoken, validateRequestForQuery(paginationValidation), getAssignBooking);
+router.get("/getAssignBookings", verifytoken, validateRequestForQuery(assignBookingsValidation), getAssignBooking);
 
 /* Edit booking status by driver */
 router.put("/editBookingStatus", verifytoken, validateRequest(bookingStatusChangeValidation), editBookingStatus);

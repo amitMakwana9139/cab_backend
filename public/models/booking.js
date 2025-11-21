@@ -120,7 +120,7 @@ const bookingDetails = new mongoose.Schema({
     driverId: {
         type: mongoose.Schema.Types.ObjectId,
         required: false,
-        ref: "user",
+        ref: "User",
         default: null
     },
     driverNumber: {
@@ -140,6 +140,11 @@ const bookingDetails = new mongoose.Schema({
     },
     driverExpense: {
         type: String,
+        required: false,
+        default: ""
+    },
+    driverExpensePhotos: {
+        type: Array,
         required: false,
         default: ""
     },

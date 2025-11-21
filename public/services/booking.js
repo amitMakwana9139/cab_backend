@@ -29,16 +29,17 @@ export const bookingList = async (pageLimit, skip, search, startDate, endDate, d
         if (search) {
             query.customerName = { $regex: search, $options: "i" }
         }
+
         if (user.role === "admin") {
             query.parentAdmin = user._id;
         }
+
         if (user.role === "subAdmin") {
             query.parentAdmin = user.parentAdmin;
-        } if (user.role === "admin") {
-            query.parentAdmin = user._id;
         }
-        if (user.role === "subAdmin") {
-            query.parentAdmin = user.parentAdmin;
+
+        if (user.role === "driver") {
+            query.driverId = user._id;
         }
 
         if (date) {
@@ -66,10 +67,22 @@ export const bookingList = async (pageLimit, skip, search, startDate, endDate, d
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })
-            .select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0 })
+            .select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0, driverId: 0, parentAdmin: 0 })
             .lean();
         const totalCount = await Booking.countDocuments(query);
-        return { getCabBookingList, totalCount };
+
+        // 3️⃣ Calculate SUM of bookingPrice and vendorPrice
+        const totals = await Booking.aggregate([
+            { $match: query },
+            {
+                $group: {
+                    _id: null,
+                    totalBookingPrice: { $sum: "$bookingPrice" },
+                    totalVendorPrice: { $sum: "$vendorPrice" }
+                }
+            }
+        ]);
+        return { response: getCabBookingList, totalCount, totals };
     } catch (error) {
         throw new Error("Failed to get booking details!");
     }

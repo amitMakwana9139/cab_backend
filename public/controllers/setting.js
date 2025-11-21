@@ -7,7 +7,7 @@ export const getSummaryOfSetting = async (req, res) => {
         const pageNumber = Number(page ?? 1);
         const pageLimit = Number(limit ?? 1);
         const skip = (pageNumber - 1) * pageLimit;
-        const response = await settingBookingList(pageLimit, skip, startDate, endDate, req.user.id);
+        const response = await settingBookingList(pageLimit, skip, startDate, endDate, req.user);
         if (response) {
             res.status(200).json({
                 status: 200,

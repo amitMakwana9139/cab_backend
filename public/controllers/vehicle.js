@@ -13,7 +13,7 @@ export const addVehicle = async (req, res) => {
     const body = req.body;
     try {
         body.createdBy = req.user.id;
-        body.parentAdmin = req.user.parentAdmin;
+        body.parentAdmin = req.user.role === "admin" ? req.user._id : req.user.parentAdmin;
         const isVehicleExist = await checkVehicle(body);
         if (isVehicleExist && Object.keys(isVehicleExist).length > 0) {
             return res.status(409).json({ status: 409, success: false, message: "This vehicle already exist!", data: {} });

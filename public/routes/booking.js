@@ -8,9 +8,10 @@ import { commonIdValidation } from "../validation/common.js";
 
 const router = new Router();
 
+/* checkPermission("booking", "edit") */
 /* Create booking API */
-router.post("/booking", verifytoken, checkPermission("booking", "create"), validateRequest(createBookingValidation), cabBooking);
-router.patch("/editBooking", verifytoken, /* checkPermission("booking", "edit"), */ validateRequest(editBookingValidation), editBooking);
+router.post("/booking", verifytoken, validateRequest(createBookingValidation), cabBooking);
+router.patch("/editBooking", verifytoken, validateRequest(editBookingValidation), editBooking);
 router.get("/getBookings", verifytoken, validateRequestForQuery(getBookingsValidation), getBookings);
 router.get("/getSingleBookingDetails", verifytoken, validateRequestForQuery(commonIdValidation), getSingleBooking);
 router.delete("/deleteBooking", verifytoken, validateRequestForQuery(commonIdValidation), removeSingleBooking);

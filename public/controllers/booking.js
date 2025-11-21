@@ -5,7 +5,7 @@ export const cabBooking = async (req, res) => {
     const body = req.body;
     try {
         body.createdBy = req.user._id;
-        body.parentAdmin = req.user.parentAdmin;
+        body.parentAdmin = req.user.role === "admin" ? req.user._id : req.user.parentAdmin;
         const response = await bookCab(body);
         if (response && Object.keys(response).length > 0) {
             return res.status(200).json({ status: 200, success: true, message: "Cab book succesfully.", data: {} });
@@ -39,16 +39,18 @@ export const getBookings = async (req, res) => {
         const pageNumber = Number(page ?? 1);
         const pageLimit = Number(limit ?? 1);
         const skip = (pageNumber - 1) * pageLimit;
-        const response = await bookingList(pageLimit, skip, search, startDate, endDate, date, req.user);
-        if (response && response.getCabBookingList?.length > 0) {
+        const { response, totalCount, totals } = await bookingList(pageLimit, skip, search, startDate, endDate, date, req.user);
+        if (response && response?.length > 0) {
             res.status(200).json({
                 status: 200,
                 success: true,
                 message: "Cab booking list get succesfully.",
                 data: {
-                    data: response.getCabBookingList,
-                    count: response.totalCount,
-                    page: Math.ceil((response.totalCount / pageLimit))
+                    data: response,
+                    count: totalCount,
+                    page: Math.ceil((totalCount / pageLimit)),
+                    totalBookingPrice: totals[0]?.totalBookingPrice || 0,
+                    totalVendorPrice: totals[0]?.totalVendorPrice || 0
                 }
             });
         } else {

@@ -1,9 +1,20 @@
 import Booking from "../models/booking.js";
 
-export const settingBookingList = async (pageLimit, skip, startDate, endDate, userId) => {
+export const settingBookingList = async (pageLimit, skip, startDate, endDate, user) => {
     try {
-        const query = { /* createdBy: userId,  */isDeleted: 0 };
+        const query = { isDeleted: 0 };
 
+        if (user.role === "admin") {
+            query.parentAdmin = user._id;
+        }
+
+        if (user.role === "subAdmin") {
+            query.parentAdmin = user.parentAdmin;
+        }
+
+        if (user.role === "driver") {
+            query.driverId = user._id;
+        }
         // ✅ Apply date filter if provided
         if (startDate && endDate) {
             const start = new Date(`${startDate}T00:00:00Z`);

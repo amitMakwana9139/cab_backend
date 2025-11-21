@@ -1,5 +1,8 @@
 import User from "../models/user.js";
 import Booking from "../models/booking.js";
+import mongoose from "mongoose";
+const { ObjectId } = mongoose.Types;
+
 
 /* Driver details delete succesfully */
 export const deleteDriver = async (id) => {
@@ -45,15 +48,42 @@ export const driverList = async (pageLimit, skip, search, user) => {
 };
 
 /* Get assign booking details for driver */
-export const driverVehicleBookingList = async (pageLimit, skip, userId) => {
+export const driverVehicleBookingList = async (pageLimit, skip, search, userId, date) => {
     try {
 
         const query = { driverId: userId, isDeleted: 0 };
+
+        if (search) {
+            query.customerName = { $regex: search, $options: "i" }
+        }
+
         // if (startDate && endDate) {
         //     const start = new Date(`${startDate}T00:00:00Z`);
         //     const end = new Date(`${endDate}T23:59:59Z`);
         //     query.createdAt = { $gte: start, $lte: end };
         // }
+
+        if (date) {
+            query.$or = [
+                // Case 1: date between tripStartDate and tripEndDate
+                {
+                    $and: [
+                        { tripEndDate: { $nin: [null, ""] } },
+                        { tripStartDate: { $lte: date } },
+                        { tripEndDate: { $gte: date } }
+                    ]
+                },
+
+                // Case 2: tripEndDate is null AND exact match
+                {
+                    $and: [
+                        { tripEndDate: { $in: [null, ""] } },
+                        { tripStartDate: date }
+                    ]
+                }
+            ];
+        }
+
         const getAssignBookingList = await Booking.find(query)
             .limit(pageLimit)
             .skip(skip)
@@ -70,8 +100,20 @@ export const driverVehicleBookingList = async (pageLimit, skip, userId) => {
                 __v: 0
             })
             .lean();
+
         const totalCount = await Booking.countDocuments(query);
-        return { getAssignBookingList, totalCount };
+        // 3️⃣ Calculate SUM of bookingPrice and vendorPrice
+        const totals = await Booking.aggregate([
+            { $match: { driverId: new ObjectId(userId), isDeleted: 0 } },
+            {
+                $group: {
+                    _id: null,
+                    totalBookingPrice: { $sum: "$bookingPrice" },
+                    totalVendorPrice: { $sum: "$vendorPrice" }
+                }
+            }
+        ]);
+        return { response: getAssignBookingList, totalCount, totals };
     } catch (error) {
         throw new Error("Failed to get booking details!");
     }

@@ -62,7 +62,7 @@ export const deleteCustomerById = async (id) => {
 };
 
 /* Get all user list */
-export const userList = async (pageLimit, skip, search) => {
+export const userList = async (pageLimit, skip, search, user) => {
     try {
         // Build the base query
         const query = { isDeleted: 0 };
@@ -73,6 +73,13 @@ export const userList = async (pageLimit, skip, search) => {
                 { name: { $regex: search, $options: "i" } },
                 { mobile: { $regex: search, $options: "i" } },
             ];
+        }
+
+        if (user.role === "admin") {
+            query.parentAdmin = user._id;
+        }
+        if (user.role === "subAdmin") {
+            query.parentAdmin = user.parentAdmin;
         }
 
         const getUserList = await User.find(query).populate({

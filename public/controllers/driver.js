@@ -59,21 +59,23 @@ export const getDrivers = async (req, res) => {
 
 /* Get assign booking details for login driver */
 export const getAssignBooking = async (req, res) => {
-    const { page, limit, search } = req.query;
+    const { page, limit, search, date } = req.query;
     try {
         const pageNumber = Number(page ?? 1);
         const pageLimit = Number(limit ?? 1);
         const skip = (pageNumber - 1) * pageLimit;
-        const response = await driverVehicleBookingList(pageLimit, skip, req.user.id);
-        if (response && response.getAssignBookingList?.length > 0) {
+        const { response, totalCount, totals } = await driverVehicleBookingList(pageLimit, skip, search, req.user.id, date);
+        if (response && response?.length > 0) {
             res.status(200).json({
                 status: 200,
                 success: true,
                 message: "Assign booking list of driver get succesfully.",
                 data: {
-                    data: response.getAssignBookingList,
-                    count: response.totalCount,
-                    page: Math.ceil((response.totalCount / pageLimit))
+                    data: response,
+                    count: totalCount,
+                    page: Math.ceil((totalCount / pageLimit)),
+                    totalBookingPrice: totals[0]?.totalBookingPrice || 0,
+                    totalVendorPrice: totals[0]?.totalVendorPrice || 0
                 }
             });
         } else {
