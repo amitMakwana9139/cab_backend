@@ -63,7 +63,12 @@ export const bookingList = async (pageLimit, skip, search, startDate, endDate, d
             ];
         }
 
-        const getCabBookingList = await Booking.find(query).populate({ path: "createdBy", select: "name email mobile" })
+        const getCabBookingList = await Booking.find(query)
+            .populate({ path: "createdBy", select: "name email mobile" })
+            .populate({
+                path: "cancelBy",
+                select: "name email mobile"   // choose what you want to show
+            })
             .limit(pageLimit)
             .skip(skip)
             .sort({ createdAt: -1 })

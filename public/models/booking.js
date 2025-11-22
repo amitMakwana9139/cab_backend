@@ -161,7 +161,7 @@ const bookingDetails = new mongoose.Schema({
     cancelBy: {
         type: mongoose.Schema.Types.ObjectId,
         required: false,
-        ref: "user",
+        ref: "User",
         default: null
     },
     remarks: {
