@@ -97,6 +97,10 @@ export const singleBooking = async (id, userId) => {
     try {
         const response = await Booking.findById({ _id: id, createdBy: userId, isDeleted: 0 })
             .populate({ path: "createdBy", select: "name email mobile" })
+            .populate({
+                path: "cancelBy",
+                select: "name email mobile"   // choose what you want to show
+            })
             .select({ isBlock: 0, isDeleted: 0, __v: 0, meta: 0 });
         return response;
     } catch (error) {
