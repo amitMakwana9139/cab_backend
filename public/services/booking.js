@@ -30,11 +30,34 @@ export const bookingList = async (
 ) => {
     try {
         const query = { isDeleted: 0 };
+
+        // if (startDate && endDate) {
+        //     const start = new Date(`${startDate}T00:00:00Z`);
+        //     const end = new Date(`${endDate}T23:59:59Z`);
+        //     query.createdAt = { $gte: start, $lte: end };
+        // }
+
         if (startDate && endDate) {
-            const start = new Date(`${startDate}T00:00:00Z`);
-            const end = new Date(`${endDate}T23:59:59Z`);
-            query.createdAt = { $gte: start, $lte: end };
+            query.$or = [
+                // Case 1: Trips having start & end — overlapping range
+                {
+                    $and: [
+                        { tripEndDate: { $nin: [null, ""] } },
+                        { tripStartDate: { $lte: endDate } },
+                        { tripEndDate: { $gte: startDate } }
+                    ]
+                },
+
+                // Case 2: Ongoing trips (no end date)
+                {
+                    $and: [
+                        { tripEndDate: { $in: [null, ""] } },
+                        { tripStartDate: { $gte: startDate, $lte: endDate } }
+                    ]
+                }
+            ];
         }
+
         if (search) {
             query.customerName = { $regex: search, $options: "i" }
         }
@@ -96,7 +119,10 @@ export const bookingList = async (
                 $group: {
                     _id: null,
                     totalBookingPrice: { $sum: "$bookingPrice" },
-                    totalVendorPrice: { $sum: "$vendorPrice" }
+                    totalVendorPrice: { $sum: "$vendorPrice" },
+                    totalDriverExpense: { $sum: "$driverExpense" },
+                    totalCommission: { $sum: "$commission" },
+                    totalAdvancePaid: { $sum: "$advancePaid" },
                 }
             }
         ]);

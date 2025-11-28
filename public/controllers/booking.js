@@ -60,7 +60,10 @@ export const getBookings = async (req, res) => {
                     count: totalCount,
                     page: Math.ceil((totalCount / pageLimit)),
                     totalBookingPrice: totals[0]?.totalBookingPrice || 0,
-                    totalVendorPrice: totals[0]?.totalVendorPrice || 0
+                    totalVendorPrice: totals[0]?.totalVendorPrice || 0,
+                    totalDriverExpense: totals[0]?.totalDriverExpense || 0,
+                    totalCommission: totals[0]?.totalCommission || 0,
+                    totalAdvancePaid: totals[0]?.totalAdvancePaid || 0,
                 }
             });
         } else {

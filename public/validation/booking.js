@@ -105,15 +105,15 @@ export const getBookingsValidation = Joi.object({
     search: Joi.string().allow(""),
     driverId: objectId.optional().allow(""),
     startDate: Joi.string()
-        .pattern(/^\d{4}-\d{2}-\d{2}$/) // yyyy-mm-dd format 
+        .pattern(/^\d{2}-\d{2}-\d{4}$/) // dd-mm-yyyy format 
         .allow(null, "") // allow empty or null
         .optional(),
     endDate: Joi.string()
-        .pattern(/^\d{4}-\d{2}-\d{2}$/) // yyyy-mm-dd format
+        .pattern(/^\d{2}-\d{2}-\d{4}$/) // dd-mm-yyyy format
         .allow(null, "")      // allow empty or null
         .optional(),
     date: Joi.string()
-        .pattern(/^\d{2}-\d{2}-\d{4}$/) // yyyy-mm-dd format
+        .pattern(/^\d{2}-\d{2}-\d{4}$/) // dd-mm-yyyy format
         .allow(null, "") // allow empty or null
         .optional(),
 });
