@@ -2,7 +2,7 @@ import { Router } from "express";
 import { validateRequest, validateRequestForQuery } from "../middelware/validation.js";
 import { verifytoken } from "../utills/jwt.helper.js";
 import { commonIdValidation, paginationValidation } from "../validation/common.js";
-import { editBookingStatus, getAssignBooking, getDrivers, removeDriver } from "../controllers/driver.js";
+import { editBookingStatus, getAssignBooking, getDriverList, getDrivers, removeDriver } from "../controllers/driver.js";
 import { assignBookingsValidation, bookingStatusChangeValidation } from "../validation/driver.js";
 
 const router = new Router();
@@ -16,5 +16,8 @@ router.get("/getAssignBookings", verifytoken, validateRequestForQuery(assignBook
 
 /* Edit booking status by driver */
 router.put("/editBookingStatus", verifytoken, validateRequest(bookingStatusChangeValidation), editBookingStatus);
+
+/* Get all driver details for admin */
+router.get("/getDriverList", verifytoken, getDriverList);
 
 export default router;  

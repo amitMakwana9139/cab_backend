@@ -127,4 +127,27 @@ export const updateBookingStatus = async (id, status, reason, userId) => {
     } catch (error) {
         throw new Error("Failed to update booking status!");
     }
-}
+};
+
+
+/* Get driver list for Admin */
+export const driverData = async (user) => {
+    try {
+        const query = { role: "driver", isDeleted: 0 };
+
+        if (user.role === "admin") {
+            query.parentAdmin = user._id;
+        }
+        if (user.role === "subAdmin") {
+            query.parentAdmin = user.parentAdmin;
+        }
+
+        const response = await User.find(query)
+            .sort({ createdAt: -1 })
+            .select({ name: 1, createdAt: 1 })
+            .lean();
+        return response;
+    } catch (error) {
+        throw new Error("Failed to get booking details!");
+    }
+};
