@@ -34,12 +34,22 @@ export const editBooking = async (req, res) => {
 
 /* Get cab booking details by subAdmin id  */
 export const getBookings = async (req, res) => {
-    const { page, limit, search, startDate, endDate, date } = req.query;
+    const { page, limit, search, startDate, endDate, date, driverId } = req.query;
     try {
         const pageNumber = Number(page ?? 1);
         const pageLimit = Number(limit ?? 1);
         const skip = (pageNumber - 1) * pageLimit;
-        const { response, totalCount, totals } = await bookingList(pageLimit, skip, search, startDate, endDate, date, req.user);
+        const { response, totalCount, totals } = await
+            bookingList(
+                pageLimit,
+                skip,
+                search,
+                startDate,
+                endDate,
+                date,
+                req.user,
+                driverId
+            );
         if (response && response?.length > 0) {
             res.status(200).json({
                 status: 200,

@@ -18,7 +18,16 @@ export const editCabBooking = async (obj) => {
     }
 }
 
-export const bookingList = async (pageLimit, skip, search, startDate, endDate, date, user) => {
+export const bookingList = async (
+    pageLimit,
+    skip,
+    search,
+    startDate,
+    endDate,
+    date,
+    user,
+    driverId
+) => {
     try {
         const query = { isDeleted: 0 };
         if (startDate && endDate) {
@@ -40,6 +49,10 @@ export const bookingList = async (pageLimit, skip, search, startDate, endDate, d
 
         if (user.role === "driver") {
             query.driverId = user._id;
+        }
+
+        if (driverId) {
+            query.driverId = driverId;
         }
 
         if (date) {
